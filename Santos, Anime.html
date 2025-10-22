@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Top Anime Recommendations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #anime-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .anime-card {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      width: 200px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .anime-card img {
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    .anime-card h3 {
+      font-size: 16px;
+      margin: 10px 0 5px;
+    }
+
+    .anime-card p {
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Top Anime Recommendations</h1>
+
+  <div id="anime-list"></div>
+
+  <script>
+    // Fetch top anime from Jikan API and display
+    fetch('https://api.jikan.moe/v4/top/anime?limit=10')
+      .then(response => response.json())
+      .then(data => {
+        const animeList = document.getElementById("anime-list");
+
+        data.data.forEach(anime => {
+          const card = document.createElement("div");
+          card.className = "anime-card";
+
+          card.innerHTML = `
+            <img src="${anime.images.jpg.image_url}" alt="${anime.title}">
+            <h3>${anime.title}</h3>
+            <p>${anime.synopsis ? anime.synopsis.substring(0, 80) + "..." : "No description."}</p>
+          `;
+
+          animeList.appendChild(card);
+        });
+      })
+      .catch(error => {
+        document.getElementById("anime-list").innerHTML = "<p>Error loading anime data.</p>";
+        console.error("API Error:", error);
+      });
+  </script>
+
+</body>
+</html>
