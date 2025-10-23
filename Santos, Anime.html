@@ -51,6 +51,31 @@
 
   <div id="anime-list"></div>
 
+  <script>
+    // Fetch top anime from Jikan API and display
+    fetch('https://api.jikan.moe/v4/top/anime?limit=10')
+      .then(response => response.json())
+      .then(data => {
+        const animeList = document.getElementById("anime-list");
+
+        data.data.forEach(anime => {
+          const card = document.createElement("div");
+          card.className = "anime-card";
+
+          card.innerHTML = `
+            <img src="${anime.images.jpg.image_url}" alt="${anime.title}">
+            <h3>${anime.title}</h3>
+            <p>${anime.synopsis ? anime.synopsis.substring(0, 80) + "..." : "No description."}</p>
+          `;
+
+          animeList.appendChild(card);
+        });
+      })
+      .catch(error => {
+        document.getElementById("anime-list").innerHTML = "<p>Error loading anime data.</p>";
+        console.error("API Error:", error);
+      });
+  </script>
+
 </body>
 </html>
-
